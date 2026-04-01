@@ -1,15 +1,23 @@
 import 'package:get/state_manager.dart';
+import 'package:http/http.dart' as http;
 
 class Logincontroller extends GetxController {
-  var username = "".obs;
+  var userInput = "".obs;
   var password = "".obs;
   var passwordVisible = false.obs;
 
-  login(user, pass) {
-    username.value = user;
+  login(user, pass) async {
+    userInput.value = user;
     password.value = pass;
 
-    if (username == "admin" && password == "123456") {
+    final response = await http.get(
+      Uri.parse(
+        "http://localhost/propertysales/login.php?phonenumber=123456789&password=mypassword123",
+      ),
+    );
+
+    print(response.body);
+    if (response.body.contains('"code": 1')) {
       return true;
     } else {
       return false;

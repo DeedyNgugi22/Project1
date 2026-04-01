@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/configs/colors.dart';
 import 'package:flutter_application_1/controllers/logincontroller.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 Logincontroller logincontroller = Logincontroller() = Get.put(
   Logincontroller(),
@@ -96,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     suffixIcon: GestureDetector(
                       child: Icon(
                         logincontroller.passwordVisible.value
-                            ? Icons.visibility_off
-                            : Icons.visibility,
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                       ),
                       onTap: () {
                         logincontroller.togglePassword();
@@ -109,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             // MaterialButton(
             //   onPressed: () {},
-            //   child: Text('LogIn'),
+            //   child: const Text("LogIn"),
             //   color: Colors.pinkAccent,
             //   textColor: Colors.white,
             // ),
@@ -132,16 +135,44 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              onTap: () {
-                bool success = logincontroller.login(
-                  usernameController.text,
-                  passwordController.text,
-                );
-                if (success) {
-                  Get.offAndToNamed("/homescreen");
+
+              onTap: () async {
+                if (usernameController.text.isEmpty) {
+                  Get.snackbar("Error", "Enter Username");
+                } else if (passwordController.text.isEmpty) {
+                  Get.snackbar("Error", "Enter password");
                 } else {
-                  Get.snackbar("Login Failed", "Please check your credentials");
+                  final response = await http.get(
+                    Uri.parse(
+                      "http://localhost/propertysales/login.php?phonenumber=${usernameController.text}&password=${passwordController.text}",
+                    ),
+                  );
+                  if (response.statusCode == 200) {
+                    final serverData = jsonDecode(response.body);
+                    if (serverData['code'] == 1) {
+                      String phonenumber =
+                          serverData["userdetails"][0]["phonenumber"];
+                      print(phonenumber); // store in shared preferences
+                      Get.toNamed('/homescreen');
+                    } else {
+                      Get.snackbar("Wrong Credentials", serverData["message"]);
+                    }
+                  } else {
+                    Get.snackbar(
+                      "Server Error",
+                      "Error occured while logging in",
+                    );
+                  }
                 }
+                // bool success = logincontroller.login(
+                //   usernameController.text,
+                //   passwordController.text,
+                // );
+                // if (success) {
+                //   Get.offAndToNamed("/homescreen");
+                // } else {
+                //   Get.snackbar("Login Failed", "Please check your credentials");
+                // }
               },
             ),
             Padding(
