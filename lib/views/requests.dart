@@ -66,7 +66,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
                   Text(prices[index]),
 
-                  // Text(status[index]),
                   Text(
                     status[index],
                     style: TextStyle(
