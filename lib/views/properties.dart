@@ -14,10 +14,6 @@ class PropertiesScreen extends StatefulWidget {
 
 class _PropertiesScreenState extends State<PropertiesScreen> {
   List<Propertytype> properties = [];
-  List<Propertytype> filteredProperties = [];
-
-  String selectedLocation = "All";
-  double maxPrice = 100000000;
 
   @override
   void initState() {
@@ -25,6 +21,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
     getProperties();
   }
 
+  // FETCH PROPERTIES
   getProperties() async {
     final response = await http.get(
       Uri.parse("http://localhost/propertysales/readproperties.php"),
@@ -39,160 +36,164 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
       setState(() {
         properties = loaded;
-        filteredProperties = loaded;
       });
     }
-  }
-
-  void filterProperties() {
-    setState(() {
-      filteredProperties = properties.where((p) {
-        double price = double.tryParse(p.price) ?? 0;
-
-        bool locationMatch =
-            selectedLocation == "All" || p.location == selectedLocation;
-
-        bool priceMatch = price <= maxPrice;
-
-        return locationMatch && priceMatch;
-      }).toList();
-    });
-  }
-
-  // FILTER UI
-  void showFilterDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Filter"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButton<String>(
-                value: selectedLocation,
-                items: ["All", "Karen", "Muthaiga", "Kiambu"]
-                    .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                    .toList(),
-                onChanged: (value) {
-                  selectedLocation = value!;
-                },
-              ),
-              Slider(
-                value: maxPrice,
-                min: 1000000,
-                max: 100000000,
-                divisions: 10,
-                label: maxPrice.toString(),
-                onChanged: (value) {
-                  setState(() {
-                    maxPrice = value;
-                  });
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                filterProperties();
-              },
-              child: Text("Apply"),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Properties"),
         backgroundColor: primaryColor,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: showFilterDialog,
-          ),
-        ],
+        title: Text("Properties Display"),
+        centerTitle: true,
       ),
 
-      body: GridView.builder(
-        padding: EdgeInsets.all(10),
-        itemCount: filteredProperties.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.5,
-        ),
-        itemBuilder: (context, index) {
-          var property = filteredProperties[index];
-
-          return GestureDetector(
-            onTap: () {
-              Get.toNamed("/requests", arguments: property);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // IMAGE
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        "http://localhost/propertysales/propertyimages/${property.image}",
-                        height: 120,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.image_not_supported);
-                        },
-                      ),
-                    ),
-
-                    SizedBox(height: 10),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        property.name,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        property.price,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        property.location,
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
-                  ],
-                ),
+      body: Column(
+        children: [
+          Expanded(
+            child: GridView.builder(
+              padding: EdgeInsets.all(10),
+              itemCount: properties.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.95,
               ),
+              itemBuilder: (context, index) {
+                var property = properties[index];
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 🖼 IMAGE
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.network(
+                            "http://localhost/propertysales/propertyimages/${property.image}",
+                            height: 350,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Icon(Icons.image_not_supported);
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 10),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            property.name,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(property.description),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(property.price),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            property.location,
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                        ),
+
+                        Spacer(),
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: backgroundColor,
+                            ),
+
+                            onPressed: () {
+                              // First confirmation
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text("Request Viewing"),
+                                  content: Text(
+                                    "Do you want to request viewing?",
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text("No"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+
+                                        // Second confirmation
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => AlertDialog(
+                                            title: Text("Confirm"),
+                                            content: Text(
+                                              "Are you sure you want to proceed?",
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () =>
+                                                    Navigator.pop(context),
+                                                child: Text("Cancel"),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+
+                                                  Get.toNamed(
+                                                    "/requests",
+                                                    arguments: property,
+                                                  );
+                                                },
+                                                child: Text("Proceed"),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      child: Text("Yes"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Text(
+                              "Request",
+                              style: TextStyle(color: backgroundColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
