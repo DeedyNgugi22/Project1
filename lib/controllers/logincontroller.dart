@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/state_manager.dart';
 import 'package:http/http.dart' as http;
 
@@ -6,25 +8,23 @@ class Logincontroller extends GetxController {
   var password = "".obs;
   var passwordVisible = false.obs;
 
-  login(user, pass) async {
-    userInput.value = user;
-    password.value = pass;
-
+  Future<Map?> login(user, pass) async {
     final response = await http.get(
       Uri.parse(
-        "http://localhost/propertysales/login.php?phonenumber=123456789&password=mypassword123",
+        "http://localhost/propertysales/login.php?phonenumber=$user&password=$pass",
       ),
     );
 
-    print(response.body);
-    if (response.body.contains('"code": 1')) {
-      return true;
+    final data = jsonDecode(response.body);
+
+    if (data['code'] == 1) {
+      return data['userdetails'][0]; // ✅ FULL USER OBJECT
     } else {
-      return false;
+      return null;
     }
   }
 
-  togglePassword() {
+  void togglePassword() {
     passwordVisible.value = !passwordVisible.value;
   }
 }

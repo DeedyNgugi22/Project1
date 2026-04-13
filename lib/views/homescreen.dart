@@ -1,11 +1,13 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-// ignore: unused_import
 import 'package:flutter_application_1/configs/colors.dart';
+// import 'package:flutter_application_1/controllers/homescreencontroller.dart';
+// import 'package:flutter_application_1/views/login.dart';
 import 'package:flutter_application_1/views/properties.dart';
 import 'profile.dart';
 import 'dashboard.dart';
 import 'requests.dart';
+import 'package:get/get.dart';
 
 final List titles = ["Villas", "Apartments", "Mansionettes", "Town Houses"];
 final List iconData = [
@@ -26,6 +28,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = Get.arguments ?? {};
+    final username = user["fullname"] ?? "User";
     return Scaffold(
       backgroundColor: backgroundColor,
       body: Column(
@@ -46,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Hi Deedy, Find Your Dream Home Today!!",
+              "Hi $username, Find Your Dream Home Today!!",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
           ),
@@ -109,29 +113,17 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (index) {
           //Handle button tap
           if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DashboardScreen()),
-            );
+            Get.to(() => DashboardScreen(), arguments: user);
           }
 
           if (index == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => PropertiesScreen()),
-            );
+            Get.to(() => PropertiesScreen(), arguments: user);
           }
 
           if (index == 2) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => RequestsScreen()),
-            );
+            Get.to(() => RequestsScreen(), arguments: user);
           } else if (index == 3) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()),
-            );
+            Get.to(() => ProfileScreen(), arguments: user);
           }
         },
       ),

@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/views/propertytype.dart';
+import 'package:flutter_application_1/models/propertytype.dart';
 import 'package:get/state_manager.dart';
 
 class Propertiescontroller extends GetxController {

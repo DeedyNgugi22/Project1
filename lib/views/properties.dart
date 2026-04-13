@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/configs/colors.dart';
-import 'package:flutter_application_1/views/propertytype.dart';
+import 'package:flutter_application_1/models/propertytype.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,7 +22,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   }
 
   // FETCH PROPERTIES
-  getProperties() async {
+  Future<void> getProperties() async {
     final response = await http.get(
       Uri.parse("http://localhost/propertysales/readproperties.php"),
     );
@@ -42,6 +42,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Get.arguments ?? {};
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -57,7 +58,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
               itemCount: properties.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                childAspectRatio: 0.95,
+                childAspectRatio: 0.89,
               ),
               itemBuilder: (context, index) {
                 var property = properties[index];
@@ -67,7 +68,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
                   child: Container(
                     decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
+                      color: primaryColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
                     ),
 
@@ -139,7 +140,10 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                                   actions: [
                                     TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: Text("No"),
+                                      child: Text(
+                                        "No",
+                                        style: TextStyle(color: primaryColor),
+                                      ),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -157,7 +161,12 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                                               TextButton(
                                                 onPressed: () =>
                                                     Navigator.pop(context),
-                                                child: Text("Cancel"),
+                                                child: Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                    color: primaryColor,
+                                                  ),
+                                                ),
                                               ),
                                               TextButton(
                                                 onPressed: () {
@@ -165,16 +174,24 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
 
                                                   Get.toNamed(
                                                     "/requests",
-                                                    arguments: property,
+                                                    arguments: user,
                                                   );
                                                 },
-                                                child: Text("Proceed"),
+                                                child: Text(
+                                                  "Proceed",
+                                                  style: TextStyle(
+                                                    color: primaryColor,
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),
                                         );
                                       },
-                                      child: Text("Yes"),
+                                      child: Text(
+                                        "Yes",
+                                        style: TextStyle(color: primaryColor),
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -9,7 +9,7 @@ class SignupController extends GetxController {
   var passwordVisible = false.obs;
   var confirmPasswordVisible = false.obs;
 
-  register(String name, String mail, String pass) async {
+  Future<bool> register(String name, String mail, String pass) async {
     fullname.value = name;
     email.value = mail;
     password.value = pass;

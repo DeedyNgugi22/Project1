@@ -6,9 +6,7 @@ import 'package:flutter_application_1/controllers/logincontroller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-Logincontroller logincontroller = Logincontroller() = Get.put(
-  Logincontroller(),
-);
+Logincontroller logincontroller = Get.put(Logincontroller());
 
 TextEditingController usernameController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
@@ -150,10 +148,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (response.statusCode == 200) {
                     final serverData = jsonDecode(response.body);
                     if (serverData['code'] == 1) {
-                      String phonenumber =
-                          serverData["userdetails"][0]["phonenumber"];
-                      print(phonenumber); // store in shared preferences
-                      Get.toNamed('/homescreen');
+                      var userData = serverData["userdetails"][0];
+
+                      print(userData); // debug
+
+                      Get.toNamed("/homescreen", arguments: userData);
                     } else {
                       Get.snackbar("Wrong Credentials", serverData["message"]);
                     }
