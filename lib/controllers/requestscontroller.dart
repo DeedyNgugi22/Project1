@@ -8,14 +8,20 @@ class RequestController extends GetxController {
 
   Future<void> fetchRequests(String userId) async {
     try {
+      isLoading.value = true;
+
       final response = await http.get(
         Uri.parse(
-          "http://localhost/propertysales/readrequests.php?user_id=$userId",
+          "http://localhost/propertysales/readrequests.php?userid=$userId",
         ),
       );
 
+      print("REQUEST RESPONSE: ${response.body}");
+
       if (response.statusCode == 200) {
-        requests.value = jsonDecode(response.body); // ✅ THIS FIXES YOUR ERROR
+        var data = jsonDecode(response.body);
+
+        requests.value = data['data'] ?? [];
       }
     } catch (e) {
       print("ERROR: $e");
@@ -24,16 +30,26 @@ class RequestController extends GetxController {
     }
   }
 
-  Future<void> deleteRequest(String id, String userId) async {
+  //DELETE REQUEST
+  Future<bool> deleteRequest(String id, String userId) async {
     try {
-      await http.post(
+      final response = await http.post(
         Uri.parse("http://localhost/propertysales/deleterequest.php"),
         body: {"id": id},
       );
 
-      fetchRequests(userId); // refresh
+      var result = jsonDecode(response.body);
+
+      if (result["success"] == 1) {
+        // refresh list AFTER delete
+        await fetchRequests(userId);
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       print("DELETE ERROR: $e");
+      return false;
     }
   }
 }

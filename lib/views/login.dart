@@ -152,7 +152,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       print(userData); // debug
 
-                      Get.toNamed("/homescreen", arguments: userData);
+                      Get.offAndToNamed(
+                        "/homescreen",
+                        arguments: {
+                          "id": userData["id"].toString(),
+                          "fullname": userData["fullname"].toString(),
+                        },
+                      );
                     } else {
                       Get.snackbar("Wrong Credentials", serverData["message"]);
                     }

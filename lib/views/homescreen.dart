@@ -114,13 +114,9 @@ class _HomeScreenState extends State<HomeScreen> {
           //Handle button tap
           if (index == 0) {
             Get.to(() => DashboardScreen(), arguments: user);
-          }
-
-          if (index == 1) {
+          } else if (index == 1) {
             Get.to(() => PropertiesScreen(), arguments: user);
-          }
-
-          if (index == 2) {
+          } else if (index == 2) {
             Get.to(() => RequestsScreen(), arguments: user);
           } else if (index == 3) {
             Get.to(() => ProfileScreen(), arguments: user);

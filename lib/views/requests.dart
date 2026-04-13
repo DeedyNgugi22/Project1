@@ -10,19 +10,21 @@ class RequestsScreen extends StatefulWidget {
 
 class _RequestsScreenState extends State<RequestsScreen> {
   final RequestController controller = Get.put(RequestController());
-  final user = Get.arguments ?? {};
-
+  late String userId = "";
   @override
   void initState() {
     super.initState();
 
-    final userId = user["id"]?.toString() ?? "";
+    final user = Get.arguments ?? {};
+    userId = user["id"]?.toString() ?? "";
+
+    print("REQUEST USER ID: $userId");
+
     controller.fetchRequests(userId);
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: backgroundColor,
 
@@ -50,10 +52,10 @@ class _RequestsScreenState extends State<RequestsScreen> {
           padding: EdgeInsets.all(10),
           itemCount: controller.requests.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.75,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
+            crossAxisCount: 3,
+            childAspectRatio: 0.96,
+            // crossAxisSpacing: 10,
+            // mainAxisSpacing: 10,
           ),
 
           itemBuilder: (context, index) {
@@ -61,84 +63,146 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
             final String id = (req['id'] ?? '').toString();
             final String name = (req['name'] ?? 'Property').toString();
+            final String location = (req['location'] ?? '').toString();
             final String price = (req['price'] ?? '0').toString();
             final String image = (req['image'] ?? '').toString();
             final String status = (req['status'] ?? 'Pending').toString();
 
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-              ),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
 
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(15),
-                    ),
-                    child: Image.network(
-                      "http://localhost/propertysales/propertyimages/$image",
-                      height: 100,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Icon(Icons.image, size: 50),
-                    ),
-                  ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: primaryColor.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
 
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      children: [
-                        Text(
-                          name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        "http://localhost/propertysales/propertyimages/$image",
+                        height: 350,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            Icon(Icons.image_not_supported),
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
                         ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(".$location"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(".$price"),
+                    ),
 
-                        Text("KES $price"),
-
-                        Container(
-                          margin: EdgeInsets.only(top: 5),
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        decoration: BoxDecoration(
+                          color: status == "Approved"
+                              ? Colors.green.withOpacity(0.2)
+                              : status == "Declined"
+                              ? Colors.red.withOpacity(0.2)
+                              : Colors.orange.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          status,
+                          style: TextStyle(
+                            fontSize: 12,
                             color: status == "Approved"
-                                ? Colors.green.withOpacity(0.2)
+                                ? Colors.green
                                 : status == "Declined"
-                                ? Colors.red.withOpacity(0.2)
-                                : Colors.orange.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            status,
-                            style: TextStyle(
-                              color: status == "Approved"
-                                  ? Colors.green
-                                  : status == "Declined"
-                                  ? Colors.red
-                                  : Colors.orange,
-                            ),
+                                ? Colors.red
+                                : Colors.orange,
                           ),
                         ),
-
-                        if (status == "Pending")
-                          IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () {
-                              controller.deleteRequest(
-                                id,
-                                user["id"]?.toString() ?? "",
-                              );
-                            },
-                          ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+
+                    Spacer(),
+
+                    if (status == "Pending")
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text("Delete Request"),
+                                content: Text(
+                                  "Are you sure you want to delete this request?",
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text("No"),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+
+                                      bool success = await controller
+                                          .deleteRequest(id, userId);
+
+                                      if (success) {
+                                        Get.snackbar(
+                                          "Success",
+                                          "Request deleted successfully",
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
+
+                                        // REFRESH LIST
+                                        controller.fetchRequests(userId);
+                                      } else {
+                                        Get.snackbar(
+                                          "Error",
+                                          "Failed to delete request",
+                                          snackPosition: SnackPosition.BOTTOM,
+                                        );
+                                      }
+                                    },
+                                    child: Text("Yes"),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          child: Text("Delete Request"),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             );
           },
