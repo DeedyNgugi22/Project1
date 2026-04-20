@@ -4,6 +4,8 @@ import 'package:flutter_application_1/controllers/requestscontroller.dart';
 import 'package:flutter_application_1/configs/colors.dart';
 
 class RequestsScreen extends StatefulWidget {
+  const RequestsScreen({super.key});
+
   @override
   State<RequestsScreen> createState() => _RequestsScreenState();
 }
@@ -52,8 +54,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
           padding: EdgeInsets.all(10),
           itemCount: controller.requests.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 0.96,
+            crossAxisCount: 1,
+            childAspectRatio: 0.68,
             // crossAxisSpacing: 10,
             // mainAxisSpacing: 10,
           ),
@@ -73,7 +75,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
               child: Container(
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.2),
+                  color: secondaryColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
 
@@ -83,11 +85,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        "http://localhost/propertysales/propertyimages/$image",
+                        "http://10.215.76.151/propertysales/propertyimages/$image",
                         height: 350,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) =>
+                        errorBuilder: (_, _, _) =>
                             Icon(Icons.image_not_supported),
                       ),
                     ),
@@ -106,11 +108,24 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(".$location"),
+                      child: Row(
+                        children: [
+                          Icon(Icons.location_on, size: 16, color: Colors.grey),
+                          SizedBox(width: 5),
+                          Expanded(child: Text(location)),
+                        ],
+                      ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(".$price"),
+                      child: Row(
+                        children: [
+                          Icon(Icons.money, size: 16, color: Colors.green),
+                          SizedBox(width: 5),
+                          Text(price),
+                        ],
+                      ),
                     ),
 
                     Padding(

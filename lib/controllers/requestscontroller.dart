@@ -12,7 +12,7 @@ class RequestController extends GetxController {
 
       final response = await http.get(
         Uri.parse(
-          "http://localhost/propertysales/readrequests.php?userid=$userId",
+          "http://10.215.76.151/propertysales/readrequests.php?userid=$userId",
         ),
       );
 
@@ -34,7 +34,7 @@ class RequestController extends GetxController {
   Future<bool> deleteRequest(String id, String userId) async {
     try {
       final response = await http.post(
-        Uri.parse("http://localhost/propertysales/deleterequest.php"),
+        Uri.parse("http://10.215.76.151/propertysales/deleterequest.php"),
         body: {"id": id},
       );
 

@@ -16,7 +16,7 @@ class SignupController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse("http://localhost/propertysales/signup.php"),
+        Uri.parse("http://192.168.100.3/propertysales/signup.php"),
         body: {"fullname": name, "email": mail, "password": pass},
       );
 

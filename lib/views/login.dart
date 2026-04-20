@@ -60,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
-                  hint: Text("Email or Phone Number"),
+                  hint: Text("Phone Number"),
 
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 } else {
                   final response = await http.get(
                     Uri.parse(
-                      "http://localhost/propertysales/login.php?phonenumber=${usernameController.text}&password=${passwordController.text}",
+                      "http://10.215.76.151/propertysales/login.php?phonenumber=${usernameController.text}&password=${passwordController.text}",
                     ),
                   );
                   if (response.statusCode == 200) {
@@ -157,6 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         arguments: {
                           "id": userData["id"].toString(),
                           "fullname": userData["fullname"].toString(),
+                          "email": userData["email"].toString(),
+                          "role": (userData["role"] ?? "user").toString(),
                         },
                       );
                     } else {

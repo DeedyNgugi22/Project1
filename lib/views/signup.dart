@@ -261,7 +261,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       } else {
                         final response = await http.post(
                           Uri.parse(
-                            "http://localhost/propertysales/signup.php",
+                            "http://10.215.76.151/propertysales/signup.php",
                           ),
                           body: {
                             "fullname": nameController.text,
@@ -275,9 +275,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           if (serverData['success'] == 1) {
                             Get.snackbar("Success", "You are registered");
                             Get.offAndToNamed("/");
+                          } else {
+                            Get.snackbar("Error", serverData['message']);
                           }
-                        } else {
-                          Get.snackbar("Registration", "Registration Failed");
                         }
                       }
                     },

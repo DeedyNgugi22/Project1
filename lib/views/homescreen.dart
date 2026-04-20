@@ -7,6 +7,7 @@ import 'package:flutter_application_1/views/properties.dart';
 import 'profile.dart';
 import 'dashboard.dart';
 import 'requests.dart';
+import 'admin_requests.dart';
 import 'package:get/get.dart';
 
 final List titles = ["Villas", "Apartments", "Mansionettes", "Town Houses"];
@@ -50,7 +51,8 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Hi $username, Find Your Dream Home Today!!",
+              "Hi $username. Find Your Dream Home Today!!",
+              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
           ),
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 3.1,
+              childAspectRatio: 0.7,
             ),
             itemBuilder: (context, index) {
               return Padding(
@@ -111,13 +113,16 @@ class _HomeScreenState extends State<HomeScreen> {
           Icon(Icons.person, size: 30),
         ],
         onTap: (index) {
-          //Handle button tap
           if (index == 0) {
             Get.to(() => DashboardScreen(), arguments: user);
           } else if (index == 1) {
             Get.to(() => PropertiesScreen(), arguments: user);
           } else if (index == 2) {
-            Get.to(() => RequestsScreen(), arguments: user);
+            if (user["role"] == "admin") {
+              Get.to(() => AdminRequestsScreen(), arguments: user);
+            } else {
+              Get.to(() => RequestsScreen(), arguments: user);
+            }
           } else if (index == 3) {
             Get.to(() => ProfileScreen(), arguments: user);
           }

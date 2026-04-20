@@ -18,7 +18,7 @@ class Logincontroller extends GetxController {
     final data = jsonDecode(response.body);
 
     if (data['code'] == 1) {
-      return data['userdetails'][0]; // ✅ FULL USER OBJECT
+      return data['userdetails'][0];
     } else {
       return null;
     }

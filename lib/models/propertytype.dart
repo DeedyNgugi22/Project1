@@ -5,6 +5,7 @@ class Propertytype {
   String location;
   String description;
   String image;
+  String status;
   String create_at;
   String update_at;
 
@@ -15,6 +16,7 @@ class Propertytype {
     required this.location,
     required this.description,
     required this.image,
+    required this.status,
     required this.create_at,
     required this.update_at,
   });
@@ -27,6 +29,7 @@ class Propertytype {
       location: json['location']?.toString() ?? '',
       description: json['description']?.toString() ?? '',
       image: json['image']?.toString() ?? '',
+      status: json['status'] ?? "Available",
       create_at: json['create_at']?.toString() ?? '',
       update_at: json['update_at']?.toString() ?? '',
     );

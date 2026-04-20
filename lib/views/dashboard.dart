@@ -48,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 2.3,
+                childAspectRatio: 0.5,
               ),
               itemBuilder: (context, index) {
                 return Padding(
