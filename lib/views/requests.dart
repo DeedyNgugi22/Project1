@@ -54,7 +54,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
           padding: EdgeInsets.all(10),
           itemCount: controller.requests.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
+            crossAxisCount: 4,
             childAspectRatio: 0.68,
             // crossAxisSpacing: 10,
             // mainAxisSpacing: 10,
@@ -85,7 +85,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        "http://10.215.76.151/propertysales/propertyimages/$image",
+                        "http://10.7.23.13/propertysales/propertyimages/$image",
                         height: 350,
                         width: double.infinity,
                         fit: BoxFit.cover,

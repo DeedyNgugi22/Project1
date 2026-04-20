@@ -261,7 +261,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       } else {
                         final response = await http.post(
                           Uri.parse(
-                            "http://10.215.76.151/propertysales/signup.php",
+                            "http://10.7.23.13/propertysales/signup.php",
                           ),
                           body: {
                             "fullname": nameController.text,

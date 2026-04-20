@@ -25,7 +25,7 @@ class _AdminRequestsScreenState extends State<AdminRequestsScreen> {
   Future<void> fetchRequests() async {
     try {
       final res = await http.get(
-        Uri.parse("http://10.215.76.151/propertysales/admin_readrequests.php"),
+        Uri.parse("http://10.7.23.13/propertysales/admin_readrequests.php"),
       );
 
       if (res.statusCode == 200) {
@@ -54,9 +54,7 @@ class _AdminRequestsScreenState extends State<AdminRequestsScreen> {
   Future<bool> updateStatus(String id, String status) async {
     try {
       final res = await http.post(
-        Uri.parse(
-          "http://10.215.76.151/propertysales/update_requeststatus.php",
-        ),
+        Uri.parse("http://10.7.23.13/propertysales/update_requeststatus.php"),
         body: {"id": id, "status": status},
       );
 
@@ -92,7 +90,7 @@ class _AdminRequestsScreenState extends State<AdminRequestsScreen> {
               padding: EdgeInsets.all(10),
               itemCount: requests.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
+                crossAxisCount: 4,
                 childAspectRatio: 0.8,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
@@ -124,7 +122,7 @@ class _AdminRequestsScreenState extends State<AdminRequestsScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: Image.network(
-                          "http://10.215.76.151/propertysales/propertyimages/$image",
+                          "http://10.7.23.13/propertysales/propertyimages/$image",
                           height: 230,
                           width: double.infinity,
                           fit: BoxFit.cover,

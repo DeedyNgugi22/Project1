@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 } else {
                   final response = await http.get(
                     Uri.parse(
-                      "http://10.215.76.151/propertysales/login.php?phonenumber=${usernameController.text}&password=${passwordController.text}",
+                      "http://10.7.23.13/propertysales/login.php?phonenumber=${usernameController.text}&password=${passwordController.text}",
                     ),
                   );
                   if (response.statusCode == 200) {

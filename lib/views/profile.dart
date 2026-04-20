@@ -96,14 +96,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: ClipOval(
                   child: imagePath != null
                       ? kIsWeb
-                            // 🌐 WEB
+                            //web
                             ? Image.network(
                                 imagePath!,
                                 width: 260,
                                 height: 260,
                                 fit: BoxFit.cover,
                               )
-                            // 📱 MOBILE
+                            // mobile
                             : Image.file(
                                 File(imagePath!),
                                 width: 260,

@@ -24,7 +24,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   // fetch properties
   Future<void> getProperties() async {
     final response = await http.get(
-      Uri.parse("http://10.215.76.151/propertysales/readproperties.php"),
+      Uri.parse("http://10.7.23.13/propertysales/readproperties.php"),
     );
 
     if (response.statusCode == 200) {
@@ -44,7 +44,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   Future<bool> sendRequest(String userId, String propertyId) async {
     try {
       final response = await http.post(
-        Uri.parse("http://10.215.76.151/propertysales/addrequests.php"),
+        Uri.parse("http://10.7.23.13/propertysales/addrequests.php"),
         body: {
           "userid": userId.toString(),
           "propertyid": propertyId.toString(),
@@ -71,7 +71,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
   Future<bool> updatePropertyStatus(String propertyId, String status) async {
     try {
       final response = await http.post(
-        Uri.parse("http://10.215.76.151/propertysales/updateproperty.php"),
+        Uri.parse("http://10.7.23.13/propertysales/updateproperty.php"),
         body: {"id": propertyId, "status": status},
       );
 
@@ -102,7 +102,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
         padding: EdgeInsets.all(10),
         itemCount: properties.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
+          crossAxisCount: 4,
           childAspectRatio: 0.67,
         ),
         itemBuilder: (context, index) {
@@ -124,7 +124,7 @@ class _PropertiesScreenState extends State<PropertiesScreen> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Image.network(
-                      "http://10.215.76.151/propertysales/propertyimages/${property.image}",
+                      "http://10.7.23.13/propertysales/propertyimages/${property.image}",
                       height: 250,
                       width: double.infinity,
                       fit: BoxFit.cover,
